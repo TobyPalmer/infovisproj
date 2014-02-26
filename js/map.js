@@ -32,14 +32,19 @@ function map(){
 
     g = svg.append("g");
 
-         d3.csv("data/OECD-better-life-index-hi.csv", function(data) {
-
+         //d3.csv("data/OECD-better-life-index-hi.csv", function(data) {
+            d3.csv("data/factbook.csv", function(data) {
         self.data = data;
+
 
         var dd1 = $("#dropdown1");
         var dd2 = $("#dropdown2");
         var dd3 = $("#dropdown3");
         var dd4 = $("#dropdown4");
+        var dd5 = $("#dropdown5");
+        var dd6 = $("#dropdown6");
+        var dd7 = $("#dropdown7");
+        var dd8 = $("#dropdown8");
 
         var c = 0;
 
@@ -49,6 +54,10 @@ function map(){
                 dd2.append(new Option(current));
                 dd3.append(new Option(current));
                 dd4.append(new Option(current));
+                dd5.append(new Option(current));
+                dd6.append(new Option(current));
+                dd7.append(new Option(current));
+                dd8.append(new Option(current));
             }
             c++;
         }
@@ -79,8 +88,11 @@ function map(){
         
         var max = d3.max(self.data, function(d){return d[t1]; });
         var min = d3.min(self.data, function(d){return d[t1]; });
+        var mean = d3.mean(self.data, function(d){return d[t1]; });
         console.log(min);
         console.log(max);
+        mean = Math.round(mean);
+        console.log(mean);
         var country = g.selectAll(".country").data(countries);
         //var country = g.selectAll(".country").data(self.data);
         //console.log(countries);
@@ -114,11 +126,12 @@ function map(){
             .style("fill", function(d,i){
                 //console.log(d.properties);
                 //console.log(d.properties.name);
-
+                console.log(self.data[1]["Population"]);
                 for(var j = 0; j<self.data.length; j++){
                  
                     if(self.data[j]["Country"]==d.properties.name){
-                        return getColor(self.data[j][t1],min,max);
+
+                        return getColor(self.data[j][t1],min,max,mean);
                     }
                 }
 
@@ -138,7 +151,13 @@ function map(){
             })
             //selection
             .on("click",  function(d) {
-                //alert(d.properties.name);
+                for(var j = 0; j<self.data.length; j++){
+                 
+                    if(self.data[j]["Country"]==d.properties.name){
+
+                        alert(d.properties.name + ", " + self.data[j][t1]);
+                    }
+                }
 
                 //...
             });

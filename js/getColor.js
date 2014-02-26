@@ -1,20 +1,37 @@
-function getColor(d, min, max){
+function getColor(d, min, max, mean){
 
-	range = max-min;
-	console.log(d);
+
+	rangeMin = mean-min;
+	rangeMax = max-mean;
+	rangeMin = rangeMin/10;
+	rangeMax = rangeMax/10;
+
 
     var colorArray = d3.entries(colorbrewer)[10].value[9];
     
-    return d<(range/9)+min ? colorArray[0] :
-           d<((range/9)*2)+min ? colorArray[1] :
-           d<((range/9)*3)+min ? colorArray[2] :
-           d<((range/9)*4)+min ? colorArray[3] :
-           d<((range/9)*5)+min ? colorArray[4] :
-           d<((range/9)*6)+min ? colorArray[5] :
-           d<((range/9)*7)+min ? colorArray[6] :
-           d<((range/9)*8)+min ? colorArray[7] : colorArray[8];
+    return d< (min+rangeMin) ? colorArray[0] :
+           d< (min+rangeMin*4)? colorArray[1] :
+           d< (min+rangeMin*7)? colorArray[2] :
+           d< (min+rangeMin*9)? colorArray[3] :
+           d< mean ? colorArray[4] :
+           d< (max-rangeMax*9)? colorArray[5] :
+           d< (max-rangeMax*4)? colorArray[6] :
+           d< (max-rangeMax*2) ? colorArray[7] : colorArray[8];
  
 
 
 
+};
+
+function getBrushColor(data,variable,d,min,max,mean){
+
+        for(var j = 0; j<data.length; j++){
+         
+            if(data[j]["Country"]==d.properties.name){
+
+                return getColor(data[j][variable],min,max,mean);
+            }
+        }
+
+        return "green";
 };

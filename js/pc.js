@@ -31,7 +31,8 @@ function pc(){
         .attr("transform", "translate(" + margin[3] + "," + margin[0] + ")");
 
     //Load data
-    d3.csv("data/OECD-better-life-index-hi.csv", function(data) {
+   //d3.csv("data/OECD-better-life-index-hi.csv", function(data) {
+        d3.csv("data/factbook.csv", function(data) {
 
         self.data = data;
         
@@ -40,13 +41,16 @@ function pc(){
         var t2 =  $("#dropdown2 option:selected").text();
         var t3 =  $("#dropdown3 option:selected").text();
         var t4 =  $("#dropdown4 option:selected").text();
-
+        var t5 =  $("#dropdown5 option:selected").text();
+        var t6 =  $("#dropdown6 option:selected").text();
+        var t7 =  $("#dropdown7 option:selected").text();
+        var t8 =  $("#dropdown8 option:selected").text();
         
         var notTheese = [];
         var theese = [];
 
         for(var current in data[0]){
-            if(t1 == current || t2 == current || t3 == current || t4 == current){
+            if(t1 == current || t2 == current || t3 == current || t4 == current || t5 == current || t6 == current ||t7 == current || t8 == current){
                 theese.push(current);
             }
             else{
@@ -57,7 +61,7 @@ function pc(){
         // Extract the list of dimensions and create a scale for each.
         //...
         x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
-                return (d==theese[0] || d==theese[1] || d==theese[2] || d==theese[3]) && (y[d] = d3.scale.linear()
+                return (d==theese[0] || d==theese[1] || d==theese[2] || d==theese[3] || d==theese[4] || d==theese[5] || d==theese[6] || d==theese[7]) && (y[d] = d3.scale.linear()
                 //return   d!="Country" && d!=notTheese[0] && d!=notTheese[1] && d!=notTheese[2] && d!=notTheese[3] && d!=notTheese[4] && d!=notTheese[5] && d!=notTheese[6] && (y[d] = d3.scale.linear()
                     .domain(d3.extent(data, function(p){
                         return +p[d];
@@ -89,6 +93,13 @@ function pc(){
 
     function draw(){
         // Add grey background lines for context.
+
+        var t1 =  $("#dropdown1 option:selected").text();
+        
+        var max = d3.max(self.data, function(d){return d[t1]; });
+        var min = d3.min(self.data, function(d){return d[t1]; });
+        var mean = d3.mean(self.data, function(d){return d[t1]; });
+
         background = svg.append("svg:g")
             .attr("class", "background")
             .selectAll("path")
@@ -113,10 +124,12 @@ function pc(){
             .enter().append("svg:path")
             .attr("d", path)
 
-            .style("stroke", function(d){
+            .style("stroke", function(d,i){
                 //return getColor(d["Country"].length);
-                return "green";
+                return getColor(d[t1],min,max,mean);
             })
+
+
 
             .on("click", function(d){
                 pc1.selectLine(d);
@@ -166,6 +179,11 @@ function pc(){
 
     // Handles a brush event, toggling the display of foreground lines.
     function brush() {
+        var t1 =  $("#dropdown1 option:selected").text();
+        
+        var max = d3.max(self.data, function(d){return d[t1]; });
+        var min = d3.min(self.data, function(d){return d[t1]; });
+        var mean = d3.mean(self.data, function(d){return d[t1]; });
         var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
             extents = actives.map(function(p) { return y[p].brush.extent(); });
         var countries = {};
@@ -190,7 +208,7 @@ function pc(){
                         return true;
                     }
 
-                }) ? getColor(d.properties.name.length) : "gray";
+                }) ? getBrushColor(self.data,t1 ,d, min,max,mean) : "gray";
         });
 
         d3.selectAll(".country").style("opacity", function(d){
@@ -204,6 +222,7 @@ function pc(){
 
 
 
+
      
        // console.log(countries[d["Country"]]);
 
@@ -212,6 +231,7 @@ function pc(){
 
 
     }
+
 
     //method for selecting the pololyne from other components	
     this.selectLine = function(value){
