@@ -36,8 +36,6 @@ function map(){
 
         self.data = data;
 
-
-
         var dd1 = $("#dropdown1");
         var dd2 = $("#dropdown2");
         var dd3 = $("#dropdown3");
@@ -65,7 +63,10 @@ function map(){
         //load summary data
         //...
         //console.log(sp1.getData());
-        draw(countries);
+        $("#btn").on("click", function(d){
+            draw(countries);
+        });
+        
         
     });
 
@@ -74,7 +75,14 @@ function map(){
  
     function draw(countries,data)
     {
+        var t1 =  $("#dropdown1 option:selected").text();
+        
+        var max = d3.max(self.data, function(d){return d[t1]; });
+        var min = d3.min(self.data, function(d){return d[t1]; });
+        console.log(min);
+        console.log(max);
         var country = g.selectAll(".country").data(countries);
+        //var country = g.selectAll(".country").data(self.data);
         //console.log(countries);
 
         //initialize a color country object	
@@ -100,13 +108,25 @@ function map(){
             .attr("d", path)
             .attr("id", function(d) { return d.id; })
             .attr("title", function(d) { 
-                return d.properties.name; })
+                //return d.properties.name; })
+                return "jasdkn"; })
             //country color
-            .style("fill", function(d){
+            .style("fill", function(d,i){
                 //console.log(d.properties);
                 //console.log(d.properties.name);
 
-                return getColor(d.properties.name.length);
+                for(var j = 0; j<self.data.length; j++){
+                 
+                    if(self.data[j]["Country"]==d.properties.name){
+                        return getColor(self.data[j][t1],min,max);
+                    }
+                }
+
+                return "green";
+                
+                
+                //return getColor(d[t1], min, max);
+                
             })
             //...
             //tooltip
@@ -118,7 +138,7 @@ function map(){
             })
             //selection
             .on("click",  function(d) {
-                alert(d.properties.name);
+                //alert(d.properties.name);
 
                 //...
             });

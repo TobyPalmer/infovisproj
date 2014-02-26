@@ -52,9 +52,7 @@ function pc(){
             else{
                 notTheese.push(current);
             }
-        }
-
-        console.log(notTheese);     
+        }  
 
         // Extract the list of dimensions and create a scale for each.
         //...
@@ -116,7 +114,8 @@ function pc(){
             .attr("d", path)
 
             .style("stroke", function(d){
-                return getColor(d["Country"].length);
+                //return getColor(d["Country"].length);
+                return "green";
             })
 
             .on("click", function(d){
