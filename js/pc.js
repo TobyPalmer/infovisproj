@@ -100,6 +100,9 @@ function pc(){
         var min = d3.min(self.data, function(d){return d[t1]; });
         var mean = d3.mean(self.data, function(d){return d[t1]; });
 
+        if(min == "")
+            min = 0;
+
         background = svg.append("svg:g")
             .attr("class", "background")
             .selectAll("path")

@@ -36,6 +36,7 @@ function map(){
             d3.csv("data/factbook.csv", function(data) {
         self.data = data;
 
+        //console.log(data);
 
         var dd1 = $("#dropdown1");
         var dd2 = $("#dropdown2");
@@ -89,6 +90,9 @@ function map(){
         var max = d3.max(self.data, function(d){return d[t1]; });
         var min = d3.min(self.data, function(d){return d[t1]; });
         var mean = d3.mean(self.data, function(d){return d[t1]; });
+        
+        if(min == "")
+            min = 0;
         console.log(min);
         console.log(max);
         mean = Math.round(mean);
@@ -126,7 +130,7 @@ function map(){
             .style("fill", function(d,i){
                 //console.log(d.properties);
                 //console.log(d.properties.name);
-                console.log(self.data[1]["Population"]);
+                //console.log(self.data[1]["Population"]);
                 for(var j = 0; j<self.data.length; j++){
                  
                     if(self.data[j]["Country"]==d.properties.name){
