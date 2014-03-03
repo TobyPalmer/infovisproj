@@ -2,7 +2,7 @@
 
 var map = new map();
 
-function doThis(){
+//function doThis(){
 	var pc1 = new pc();
-}
+//}
 

@@ -8,8 +8,10 @@ function map(){
     var mapDiv = $("#map");
 
     var margin = {top: 20, right: 20, bottom: 20, left: 20},
-        width = mapDiv.width() - margin.right - margin.left,
-        height = mapDiv.height() - margin.top - margin.bottom;
+        // width = mapDiv.width() - margin.right - margin.left,
+        // height = mapDiv.height() - margin.top - margin.bottom;
+        width = mapDiv.width(),
+        height = mapDiv.height();
 
 
     //initialize color scale
@@ -74,6 +76,7 @@ function map(){
         //...
         //console.log(sp1.getData());
         $("#btn").on("click", function(d){
+            console.log("yolo");
             draw(countries);
         });
         
@@ -87,12 +90,25 @@ function map(){
     {
         var t1 =  $("#dropdown1 option:selected").text();
         
-        var max = d3.max(self.data, function(d){return d[t1]; });
-        var min = d3.min(self.data, function(d){return d[t1]; });
-        var mean = d3.mean(self.data, function(d){return d[t1]; });
+        var max = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var min = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var mean = 0;//d3.mean(self.data, function(d){return d[t1]; });
+
+        var count = 0;
+
+        for(var i=0; i<self.data.length; i++){
+            if(self.data[i][t1]!= ""){
+                count++;
+                if(self.data[i][t1] < min)
+                    min = self.data[i][t1];
+
+                if(self.data[i][t1]>max)
+                    max = self.data[i][t1];
+            }
+        }
         
-        if(min == "")
-            min = 0;
+        mean = mean/count;
+
         console.log(min);
         console.log(max);
         mean = Math.round(mean);
@@ -159,7 +175,7 @@ function map(){
                  
                     if(self.data[j]["Country"]==d.properties.name){
 
-                        alert(d.properties.name + ", " + self.data[j][t1]);
+                        alert(d.properties.name + ", " + t1 + ": " + self.data[j][t1]);
                     }
                 }
 
