@@ -21,7 +21,25 @@
         <link rel="stylesheet" href="css/pc.css">
         <link rel="stylesheet" href="css/sp.css">
         <link rel="stylesheet" href="css/map.css">
-
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+        </script>
+            <script>
+            $(document).ready(function(){
+              $("#Parallell").click(function(){
+                 console.log("hellulu");
+                $("#content").load("pc.html");
+                console.log("hellulu");
+                //location.hash = 'sittningen';
+              });
+              $("#Scatter").click(function(){
+                $("#content").load("sc.html");
+                console.log("hellulu");
+                //location.hash = 'sittningen';
+              });
+              
+              
+            });
+            </script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -43,8 +61,20 @@
                         </button>
                         <a class="navbar-brand" href="#">Lab 1</a>
                     </div>
+
+                    <div class="collapse navbar-collapse" id="navbar-collapse-target">
+                     <ul class="nav navbar-nav navbar-right">
+                        <li><a id="Parallell" style="cursor:pointer;">Parallell coordinates</a></li>
+                        <li><a id="Scatter" style="cursor:pointer;">Scatter plot</a></li>
+                     </ul>
+                   </div>
                 </div>
             </div>
+
+
+
+
+
 
 
 
@@ -53,82 +83,9 @@
 
             <div class="container">
                 <!-- row of columns -->
-
-
-                <br><br><br>
-
-
-                <div class="row">
-                
-                    <div id="menu" class="col-md-4 col-sm-4 col-xs-4">
-                        <B>The map will show this data</B> <BR>
-                        <SELECT class id="dropdown1" NAME="Fruit">
-                            <OPTION SELECTED> Select data for the map
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown2" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown3" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown4" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown5" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown6" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown7" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                         <BR><BR>
-                        <SELECT class id="dropdown8" NAME="Fruit">
-                            <OPTION SELECTED> Select data to look at
-    
-                        </SELECT>
-
-                        <button class id="btn">Click me</button>
-                    </div>
-                   
-
-
-                    <div id="map" class="col-md-8 col-sm-8 col-xs-8">
-                    </div>
-                  
-
+                <div id ="content">
                 </div>
-
-                <div class="row">
-                    <br><br><br>
-                   
-                        <div id="pc" style="height: 30vh"></div>
-                    
-                </div>
-            </div>
-
-        </div>
+             </div>
 
         <div id="footer">
             <div class="container">

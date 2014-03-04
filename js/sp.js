@@ -13,14 +13,15 @@ function sp(){
     
     //initialize tooltip
     //...
-    var xLabel = "Student skills";
-    var yLabel = "Voter turnout";
+
+ 
+    
 
     var x = d3.scale.linear()
-        .range([0, width]);
+        .range([0, width*0.95]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([height*0.95, 0]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -37,17 +38,47 @@ function sp(){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //Load data
-    d3.csv("data/OECD-better-life-index-hi.csv", function(error, data) {
+    d3.csv("data/factbook.csv", function(error, data) {
         self.data = data;
+
+        var d1 = $("#drop1");
+        var d2 = $("#drop2");
+        var c = 0;
+        for(var current in data[0]){
+            if(c!=0){
+                d1.append(new Option(current));
+                d2.append(new Option(current));
+            }
+            c++;
+        }
+
+        var xLabel = "Student skills";
+        var yLabel = "Voter turnout";
+
+        $("#but").on("click", function(d){
+            
+            xLabel =  $("#drop1 option:selected").text();
+            yLabel =  $("#drop2 option:selected").text();
+             //console.log(xLabel);
+             //console.log(yLabel);
+        });
         
         //define the domain of the scatter plot axes
         //...
-
+        if(yLabel.trim()=="Select data for Y"){
+            yLabel = "Area(sq km)"
+        }
+        if(xLabel.trim()=="Select data for X"){
+            xLabel = "Birth rate(births/1000 population)"
+        }
         x.domain([0, d3.max(data, function(d){
+            //console.log(d[xLabel]);
             return d[xLabel];
         })]);
         
         y.domain([0, d3.max(data, function(d){
+            //console.log(d[yLabel]);
+            //console.log(yLabel);
             return d[yLabel];
         })]);
 
@@ -58,7 +89,51 @@ function sp(){
 
     function draw()
     {
+
+        var yLabel =  $("#drop1 option:selected").text();
+        var xLabel =  $("#drop2 option:selected").text();
+
+        if(yLabel.trim()=="Select data for Y"){
+            yLabel = "Area(sq km)";
+        }
+        if(xLabel.trim()=="Select data for X"){
+            xLabel = "Birth rate(births/1000 population)";
+        }
         
+        var maxy = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var miny = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var maxx = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var minx = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var mean = 0;//d3.mean(self.data, function(d){return d[t1]; });
+        
+        var count = 0;
+
+        for(var i=0; i<self.data.length; i++){
+            if(self.data[i][yLabel]!= ""){
+                //count++;
+                if(self.data[i][yLabel] < miny)
+                    miny = self.data[i][yLabel];
+
+                if(self.data[i][yLabel]>maxy)
+                    maxy = self.data[i][yLabel];
+                //console.log(maxy);
+            }
+        }
+        for(var i=0; i<self.data.length; i++){
+            if(self.data[i][xLabel]!= ""){
+                count++;
+                if(self.data[i][xLabel] < minx)
+                    minx = self.data[i][xLabel];
+
+                if(self.data[i][xLabel]>maxx)
+                    maxx = self.data[i][xLabel];
+               //console.log(max2 + "helu");
+            }
+        }
+
+
+        mean = mean/count;
+
         // Add x axis and title.
         svg.append("g")
             .attr("class", "x axis")
@@ -98,11 +173,13 @@ function sp(){
             .data(self.data)
             .enter().append("circle")
             .attr("class", "dot")
-            .attr("cx", function(d){return d[xLabel]/100*width;})
+            .attr("cx", function(d){
+                console.log(yLabel);
+            return d[xLabel]/100*width;})
             .attr("cy", function(d){return height - d[yLabel]/100*height;})
-            .attr("r", 4)
+            .attr("r", 2)
             .style("fill", function(d){
-                //console.log(d);
+                console.log(xLabel);
                 return getColor(d["Country"].length);
             })
 
