@@ -4,6 +4,8 @@ function pc(){
 
     var pcDiv = $("#pc");
 
+
+
     var margin = [30, 10, 10, 10],
         width = pcDiv.width() - margin[1] - margin[3],
         height = pcDiv.height() - margin[0] - margin[2];
@@ -14,7 +16,7 @@ function pc(){
     
     //initialize tooltip
     //...
-
+    
     var x = d3.scale.ordinal().rangePoints([0, width], 1),
         y = {};
         
@@ -24,6 +26,8 @@ function pc(){
         background,
         foreground;
 
+
+
     var svg = d3.select("#pc").append("svg:svg")
         .attr("width", width + margin[1] + margin[3])
         .attr("height", height + margin[0] + margin[2])
@@ -32,10 +36,17 @@ function pc(){
 
     //Load data
    //d3.csv("data/OECD-better-life-index-hi.csv", function(data) {
+
+        
         d3.csv("data/factbook.csv", function(data) {
 
         self.data = data;
         
+        $("#btn").on("click", function(d){
+        
+
+
+
         
         var t1 =  $("#dropdown1 option:selected").text();
         var t2 =  $("#dropdown2 option:selected").text();
@@ -45,6 +56,8 @@ function pc(){
         var t6 =  $("#dropdown6 option:selected").text();
         var t7 =  $("#dropdown7 option:selected").text();
         var t8 =  $("#dropdown8 option:selected").text();
+        
+
         
         var notTheese = [];
         var theese = [];
@@ -57,6 +70,8 @@ function pc(){
                 notTheese.push(current);
             }
         }  
+
+        console.log(theese);
 
         // Extract the list of dimensions and create a scale for each.
         //...
@@ -87,8 +102,9 @@ function pc(){
             }));
         });*/
 
-
-        draw();
+        
+            draw();
+        });
     });
 
     function draw(){
@@ -96,12 +112,24 @@ function pc(){
 
         var t1 =  $("#dropdown1 option:selected").text();
         
-        var max = d3.max(self.data, function(d){return d[t1]; });
-        var min = d3.min(self.data, function(d){return d[t1]; });
-        var mean = d3.mean(self.data, function(d){return d[t1]; });
+        var max = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var min = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var mean = 0;//d3.mean(self.data, function(d){return d[t1]; });
 
-        if(min == "")
-            min = 0;
+        var count = 0;
+
+        for(var i=0; i<self.data.length; i++){
+            if(self.data[i][t1]!= ""){
+                count++;
+                if(self.data[i][t1] < min)
+                    min = self.data[i][t1];
+
+                if(self.data[i][t1]>max)
+                    max = self.data[i][t1];
+            }
+        }
+
+        mean = mean/count;
 
         background = svg.append("svg:g")
             .attr("class", "background")
@@ -115,7 +143,12 @@ function pc(){
             .on("mousemove", function(d){})
             .on("mouseout", function(){});
 
-            console.log(path);
+           var tooltip = d3.select("#pc")
+            .append("div")
+            .style("position", "absolute")
+            .style("visability", "hidden")
+            .style("z-index", "3")
+            .style("background-color", "orange");
 
         // Add blue foreground lines for focus.
         foreground = svg.append("svg:g")
@@ -132,14 +165,25 @@ function pc(){
                 return getColor(d[t1],min,max,mean);
             })
 
+            .on("mouseover", function(d){
+                return tooltip.style("visibility", "visible")
+                              .text(d["Country"]);
+            })
+            .on("mousemove", function(){return tooltip.style("top",
+                (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+            .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
+            .on("click",  function(d) {
+                pc1.selectLine(d);  
 
-            .on("click", function(d){
+            });
+
+            /*.on("click", function(d){
                 pc1.selectLine(d);
             })
             .on("mousemove", function(){
             })
-            .on("mouseout", function(){});
+            .on("mouseout", function(){});*/
 
         // Add a group element for each dimension.
         var g = svg.selectAll(".dimension")
@@ -187,6 +231,7 @@ function pc(){
         var max = d3.max(self.data, function(d){return d[t1]; });
         var min = d3.min(self.data, function(d){return d[t1]; });
         var mean = d3.mean(self.data, function(d){return d[t1]; });
+
         var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
             extents = actives.map(function(p) { return y[p].brush.extent(); });
         var countries = {};
@@ -256,6 +301,18 @@ function pc(){
             else
                 return 0.1;
         })
+
+        foreground.style("display", function(d) {
+            if(value["Country"]==d["Country"])
+                return "block";
+        });
+
+        foreground.style("opacity", function(d){
+            if(value["Country"]==d["Country"])
+                return 1;
+            else
+                return 0.1;
+        });
         
         
     };
