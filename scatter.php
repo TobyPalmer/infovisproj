@@ -58,7 +58,7 @@
                             </SELECT>
                         <br><br>
 
-                        <button class id="but">Go</button>
+                        <button class id="but" onclick="drawFunction()">Go</button>
                     </div>
                    
 

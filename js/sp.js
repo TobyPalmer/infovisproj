@@ -1,10 +1,29 @@
+function drawFunction(){
+
+        var yLabel =  $("#drop1 option:selected").text();
+        var xLabel =  $("#drop2 option:selected").text();
+
+        if(yLabel.trim()=="Select data for Y"){
+            yLabel = "Area(sq km)";
+        }
+        if(xLabel.trim()=="Select data for X"){
+            xLabel = "Birth rate(births/1000 population)";
+        }
+        console.log(yLabel + xLabel);
+        console.log("-------------");
+        //draw(yLabel, xLabel);
+
+        sp1.draw(xLabel, yLabel);
+}
+
+
 function sp(){
 
     var self = this; // for internal d3 functions
 
     var spDiv = $("#sp");
 
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    var margin = {top: 20, right: 20, bottom: 30, left: 100},
         width = spDiv.width() - margin.right - margin.left,
         height = spDiv.height() - margin.top - margin.bottom;
 
@@ -14,18 +33,24 @@ function sp(){
     //initialize tooltip
     //...
 
+
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
  
     
 
     var x = d3.scale.linear()
-        .range([0, width*0.95]);
+        .range([0, width]);
 
     var y = d3.scale.linear()
-        .range([height*0.95, 0]);
+        .range([height, 0]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom")
+        .ticks(10);
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -52,8 +77,8 @@ function sp(){
             c++;
         }
 
-        var xLabel = "Student skills";
-        var yLabel = "Voter turnout";
+       /*var xLabel = "Select data for Y";
+        var yLabel = "Select data for X";
 
         $("#but").on("click", function(d){
             
@@ -70,44 +95,40 @@ function sp(){
         }
         if(xLabel.trim()=="Select data for X"){
             xLabel = "Birth rate(births/1000 population)"
-        }
-        x.domain([0, d3.max(data, function(d){
-            //console.log(d[xLabel]);
-            return d[xLabel];
-        })]);
-        
-        y.domain([0, d3.max(data, function(d){
-            //console.log(d[yLabel]);
-            //console.log(yLabel);
-            return d[yLabel];
-        })]);
+        }*/
 
 
-        draw();
+       
+
+
+       // draw(xLabel, yLabel);
 
     });
 
-    function draw()
+    this.draw = function(xLabel, yLabel)
     {
+        //var self = this;
+        //self.data = self.getData();
+        //var yLabel =  $("#drop1 option:selected").text();
+        //var xLabel =  $("#drop2 option:selected").text();
 
-        var yLabel =  $("#drop1 option:selected").text();
-        var xLabel =  $("#drop2 option:selected").text();
-
-        if(yLabel.trim()=="Select data for Y"){
+        /*if(yLabel.trim()=="Select data for Y"){
             yLabel = "Area(sq km)";
         }
         if(xLabel.trim()=="Select data for X"){
             xLabel = "Birth rate(births/1000 population)";
-        }
+        }*/
+       // console.log(xLabel + "yay" +  yLabel);
         
         var maxy = 0;//d3.max(self.data, function(d){return d[t1]; });
         var miny = 10000;//d3.min(self.data, function(d){return d[t1]; });
         var maxx = 0;//d3.max(self.data, function(d){return d[t1]; });
         var minx = 10000;//d3.min(self.data, function(d){return d[t1]; });
-        var mean = 0;//d3.mean(self.data, function(d){return d[t1]; });
+        var meanx = 0;//d3.mean(self.data, function(d){return d[t1]; });
+        var meany = 0;
         
         var count = 0;
-
+        console.log(yLabel + " <- y, x -> " + xLabel);
         for(var i=0; i<self.data.length; i++){
             if(self.data[i][yLabel]!= ""){
                 //count++;
@@ -119,6 +140,8 @@ function sp(){
                 //console.log(maxy);
             }
         }
+        //meanx = mean/count;
+
         for(var i=0; i<self.data.length; i++){
             if(self.data[i][xLabel]!= ""){
                 count++;
@@ -131,8 +154,25 @@ function sp(){
             }
         }
 
+        console.log(maxx + " <- maxx, maxy -> " + maxy);
+        console.log(minx + " <- minx, miny -> " + miny);
 
-        mean = mean/count;
+        x.domain([minx, maxx]/*d3.max(data, function(d){
+            //console.log(d[xLabel]);
+            return d[xLabel];
+        })]*/
+        );
+        
+        y.domain([miny, maxy]);/*d3.max(data, function(d){
+            //console.log(d[yLabel]);
+            //console.log(yLabel);
+            return d[yLabel];
+        })]);*/
+
+        //min
+        console.log()
+
+        //meanx = mean/count;
 
         // Add x axis and title.
         svg.append("g")
@@ -173,13 +213,17 @@ function sp(){
             .data(self.data)
             .enter().append("circle")
             .attr("class", "dot")
+
             .attr("cx", function(d){
-                console.log(yLabel);
-            return d[xLabel]/100*width;})
-            .attr("cy", function(d){return height - d[yLabel]/100*height;})
+                console.log(d[xLabel] + " <- data, land -> " + d["Country"]);
+            return width*0.2 + 0.8*width*d[xLabel]/maxx;})// d[xLabel]/maxx;})
+
+            .attr("cy", function(d){
+            return height*0.9 - height* d[yLabel]/maxy;})
+
             .attr("r", 2)
             .style("fill", function(d){
-                console.log(xLabel);
+                //console.log(xLabel);
                 return getColor(d["Country"].length);
             })
 
@@ -191,8 +235,14 @@ function sp(){
 
             //tooltip
             .on("mouseover", function(d){
-                return tooltip.style("visibility", "visible")
-                              .text(d["Country"]);
+                //tooltip.transition()        
+                //.duration(200)      
+                //.style("opacity", .9);      
+              return  tooltip.html(d["Country"] + "<br/>" + d[xLabel] +  ", " + d[yLabel])  
+                .style("left", (d3.event.pageX - width) + "px")     
+                .style("top", (d3.event.pageY - 28) + "px");    
+               // return tooltip.style("visibility", "visible")
+                 //             .text(d["Country"]);
             })
             .on("mousemove", function(){return tooltip.style("top",
                 (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
@@ -200,6 +250,7 @@ function sp(){
 
             .on("click",  function(d) {
                 //...    
+                alert(d["Country"] + ":\n" + xLabel + ": " + d[xLabel] +  ", \n" + yLabel + ": " + d[yLabel]);
 
             });
     }
