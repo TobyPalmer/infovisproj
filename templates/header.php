@@ -14,6 +14,7 @@
                      <ul class="nav navbar-nav navbar-right">
                         <li><a href="index.php" id="Parallell" style="cursor:pointer;">Parallell Coordinates</a></li>
                         <li><a href="scatter.php" id="Scatter" style="cursor:pointer;">Scatter plot</a></li>
+                        <li><a href="pca.php" id="Pca" style="cursor:pointer;">PCA Analisys</a></li>
                      </ul>
                    </div>
                 </div>
