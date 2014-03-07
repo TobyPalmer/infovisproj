@@ -1,19 +1,49 @@
 function drawFunction(){
 
+        //document.getElementById("#sp").innerHTML = "";
+         document.getElementById("sp").innerHTML= "";
+       if(d3.select("#sp").select("g")[0][0] == null){
+            var sp1 = new sp();
+        }
+        //d3.select("#sp").remove();
+        //else{
+        //var sp1 = new sp();
+            //document.getElementById("#sp").innerHTML = "";
+          //  var sp1 = new sp();
+        //}
+       // d3.select("#sp").select("g").remove();
+        //console.log(document.getElementById("sp"));
         var yLabel =  $("#drop1 option:selected").text();
         var xLabel =  $("#drop2 option:selected").text();
+        var radius =  $("#drop3 option:selected").text();
+        var colour =  $("#drop4 option:selected").text();
+
+
 
         if(yLabel.trim()=="Select data for Y"){
-            yLabel = "Area(sq km)";
+            yLabel = "GDP";
         }
         if(xLabel.trim()=="Select data for X"){
-            xLabel = "Birth rate(births/1000 population)";
+            xLabel = "GDP - real growth rate(%)";
+        }
+        if(radius.trim()=="Select data for radius"){
+            radius = "GDP";
+        }
+        if(colour.trim()=="Select data for color"){
+            colour = "GDP - real growth rate(%)";
         }
         console.log(yLabel + xLabel);
         console.log("-------------");
         //draw(yLabel, xLabel);
+        var shit = d3.select("#sp").select("g")[0][0];
+        console.log(shit);
+        sp1.draw(xLabel, yLabel, radius, colour);
+}
 
-        sp1.draw(xLabel, yLabel);
+function clearFunction(){
+
+        //documen8t.getElementById("sp").innerHTML= "";
+        d3.select("#sp").select("g").remove();
 }
 
 
@@ -68,11 +98,15 @@ function sp(){
 
         var d1 = $("#drop1");
         var d2 = $("#drop2");
+        var d3 = $("#drop3");
+        var d4 = $("#drop4");
         var c = 0;
         for(var current in data[0]){
             if(c!=0){
                 d1.append(new Option(current));
                 d2.append(new Option(current));
+                d3.append(new Option(current));
+                d4.append(new Option(current));
             }
             c++;
         }
@@ -108,7 +142,7 @@ function sp(){
     this.draw = function(xLabel, yLabel)
     {
         //var self = this;
-        //self.data = self.getData();
+        //self.data = getData();
         //var yLabel =  $("#drop1 option:selected").text();
         //var xLabel =  $("#drop2 option:selected").text();
 
@@ -121,49 +155,49 @@ function sp(){
        // console.log(xLabel + "yay" +  yLabel);
         
         var maxy = 0;//d3.max(self.data, function(d){return d[t1]; });
-        var miny = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var miny = 999999999999;//d3.min(self.data, function(d){return d[t1]; });
         var maxx = 0;//d3.max(self.data, function(d){return d[t1]; });
-        var minx = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var minx = 999999999999;//d3.min(self.data, function(d){return d[t1]; });
         var meanx = 0;//d3.mean(self.data, function(d){return d[t1]; });
         var meany = 0;
         
         var count = 0;
         console.log(yLabel + " <- y, x -> " + xLabel);
-        for(var i=0; i<self.data.length; i++){
-            if(self.data[i][yLabel]!= ""){
+        for(var i=0; i<data.length; i++){
+            if(data[i][yLabel]!= ""){
                 //count++;
-                if(self.data[i][yLabel] < miny)
-                    miny = self.data[i][yLabel];
+                if(data[i][yLabel] < miny)
+                    miny = data[i][yLabel];
 
-                if(self.data[i][yLabel]>maxy)
-                    maxy = self.data[i][yLabel];
+                if(data[i][yLabel]>maxy)
+                    maxy = data[i][yLabel];
                 //console.log(maxy);
             }
         }
         //meanx = mean/count;
 
-        for(var i=0; i<self.data.length; i++){
-            if(self.data[i][xLabel]!= ""){
+        for(var i=0; i<data.length; i++){
+            if(data[i][xLabel]!= ""){
                 count++;
-                if(self.data[i][xLabel] < minx)
-                    minx = self.data[i][xLabel];
+                if(data[i][xLabel] < minx)
+                    minx = data[i][xLabel];
 
-                if(self.data[i][xLabel]>maxx)
-                    maxx = self.data[i][xLabel];
+                if(data[i][xLabel]>maxx)
+                    maxx = data[i][xLabel];
                //console.log(max2 + "helu");
             }
         }
 
-        console.log(maxx + " <- maxx, maxy -> " + maxy);
+        //console.log(maxx + " <- maxx, maxy -> " + maxy);
         console.log(minx + " <- minx, miny -> " + miny);
 
-        x.domain([minx, maxx]/*d3.max(data, function(d){
+        x.domain([minx, maxx*1.2]/*d3.max(data, function(d){
             //console.log(d[xLabel]);
             return d[xLabel];
         })]*/
         );
         
-        y.domain([miny, maxy]);/*d3.max(data, function(d){
+        y.domain([miny, maxy*1.2]);/*d3.max(data, function(d){
             //console.log(d[yLabel]);
             //console.log(yLabel);
             return d[yLabel];
@@ -181,7 +215,7 @@ function sp(){
             .call(xAxis)
             .append("text")
             .attr("class", "label")
-            .attr("x", width*0.5-40)
+            .attr("x", width-40)
             .attr("y", margin.bottom)
             .style("font-size", 12)
             .text(xLabel);
@@ -210,18 +244,30 @@ function sp(){
                 
         // Add the scatter dots.
         svg.selectAll(".dot")
-            .data(self.data)
+            .data(data)
             .enter().append("circle")
             .attr("class", "dot")
 
             .attr("cx", function(d){
-                console.log(d[xLabel] + " <- data, land -> " + d["Country"]);
-            return width*0.2 + 0.8*width*d[xLabel]/maxx;})// d[xLabel]/maxx;})
+                //console.log(d[xLabel] + " <- data, land -> " + d["Country"]);
+            if(d[xLabel]!="")
+                return 100 + (width-100)*(d[xLabel]/(maxx*1.2));// d[xLabel]/maxx;})
+            else
+            {
+                //console.log("kaos")
+                return 10000;
+            }})
 
             .attr("cy", function(d){
-            return height*0.9 - height* d[yLabel]/maxy;})
+            if(d[yLabel]!="")
+            return height - (height)*(d[yLabel]/(maxy*1.2));
+            else
+            {
+                //console.log("kaos2")
+                return 10000;
+            }})
 
-            .attr("r", 2)
+            .attr("r", 4)
             .style("fill", function(d){
                 //console.log(xLabel);
                 return getColor(d["Country"].length);
@@ -235,18 +281,23 @@ function sp(){
 
             //tooltip
             .on("mouseover", function(d){
-                //tooltip.transition()        
-                //.duration(200)      
-                //.style("opacity", .9);      
-              return  tooltip.html(d["Country"] + "<br/>" + d[xLabel] +  ", " + d[yLabel])  
-                .style("left", (d3.event.pageX - width) + "px")     
-                .style("top", (d3.event.pageY - 28) + "px");    
+                tooltip.transition()        
+                .duration(200)
+                .style("visibility", "visible")          
+                .style("opacity", .9);  
+
+                tooltip.html(d["Country"] + "<br/>" + d[xLabel] +  ", " + d[yLabel])  
+                //.style("left", (d3.event.pageX) + "px")     
+                //.style("top", (d3.event.pageY - 28) + "px");    
                // return tooltip.style("visibility", "visible")
                  //             .text(d["Country"]);
             })
-            .on("mousemove", function(){return tooltip.style("top",
-                (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-            .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+            .on("mousemove", function(){
+                tooltip.style("top", (d3.event.pageY-100)+"px")
+                        .style("left",(d3.event.pageX-width-120)+"px");
+            })
+            .on("mouseout", function(){tooltip.style("visibility", "hidden");
+            })
 
             .on("click",  function(d) {
                 //...    
