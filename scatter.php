@@ -56,9 +56,21 @@
                         <SELECT class id="drop2" NAME="scat">
                             <OPTION SELECTED>Select data for X
                             </SELECT>
+                        <br>
+                         <B>Scatter plot radius</B> <BR>
+                        <SELECT class id="drop1" NAME="scat">
+                            <OPTION SELECTED>Select data for radius
+                            </SELECT>
+                        <br>
+                         <B>Scatter plot color</B> <BR>
+                        <SELECT class id="drop1" NAME="scat">
+                            <OPTION SELECTED>Select data for color
+                            </SELECT>
+                        <br>
                         <br><br>
 
                         <button class id="but" onclick="drawFunction()">Go</button>
+                        <button class id="but2" onclick="clearFunction()">Clear</button>
                     </div>
                    
 
