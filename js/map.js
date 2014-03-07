@@ -20,22 +20,22 @@ function map(){
     //initialize tooltip
     //...
 
-    var projection = d3.geo.mercator()
-        .center([50, 60 ])
-        .scale(250);
+        var projection = d3.geo.mercator()
+            .center([50, 60 ])
+            .scale(250);
 
-    var svg = d3.select("#map").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .call(zoom);
+        var svg = d3.select("#map").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .call(zoom);
 
-    var path = d3.geo.path()
-        .projection(projection);
+        var path = d3.geo.path()
+            .projection(projection);
 
-    g = svg.append("g");
+        g = svg.append("g");
 
          //d3.csv("data/OECD-better-life-index-hi.csv", function(data) {
-            d3.csv("data/factbook.csv", function(data) {
+        d3.csv("data/factbook.csv", function(data) {
         self.data = data;
 
         //console.log(data);

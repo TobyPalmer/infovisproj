@@ -43,7 +43,7 @@ function pc(){
         self.data = data;
         
         $("#btn").on("click", function(d){
-        
+
 
 
 
@@ -104,11 +104,13 @@ function pc(){
 
         
             draw();
+
         });
     });
 
     function draw(){
         // Add grey background lines for context.
+
 
         var t1 =  $("#dropdown1 option:selected").text();
         
@@ -117,6 +119,12 @@ function pc(){
         var mean = 0;//d3.mean(self.data, function(d){return d[t1]; });
 
         var count = 0;
+
+        // if(d3.select("svg")){
+        //     d3.select("svg").remove();
+        // }
+
+
 
         for(var i=0; i<self.data.length; i++){
             if(self.data[i][t1]!= ""){
