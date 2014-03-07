@@ -2,7 +2,7 @@
 function map(){
 
     var zoom = d3.behavior.zoom()
-        .scaleExtent([1, 8])
+        .scaleExtent([0.5, 24])
         .on("zoom", move);
 
     var mapDiv = $("#map");
@@ -99,19 +99,18 @@ function map(){
         for(var i=0; i<self.data.length; i++){
             if(self.data[i][t1]!= ""){
                 count++;
+                mean = mean + parseFloat(self.data[i][t1]/1000000000);
                 if(self.data[i][t1] < min)
-                    min = self.data[i][t1];
+                    min = parseFloat(self.data[i][t1]);
 
                 if(self.data[i][t1]>max)
-                    max = self.data[i][t1];
+                    max = parseFloat(self.data[i][t1]);
             }
         }
-        
-        mean = mean/count;
+        mean = parseFloat(mean/count)*1000000000;
 
         console.log(min);
         console.log(max);
-        mean = Math.round(mean);
         console.log(mean);
         var country = g.selectAll(".country").data(countries);
         //var country = g.selectAll(".country").data(self.data);

@@ -45,9 +45,6 @@ function pc(){
         $("#btn").on("click", function(d){
 
 
-
-
-        
         var t1 =  $("#dropdown1 option:selected").text();
         var t2 =  $("#dropdown2 option:selected").text();
         var t3 =  $("#dropdown3 option:selected").text();
@@ -120,24 +117,19 @@ function pc(){
 
         var count = 0;
 
-        // if(d3.select("svg")){
-        //     d3.select("svg").remove();
-        // }
-
-
 
         for(var i=0; i<self.data.length; i++){
             if(self.data[i][t1]!= ""){
                 count++;
+                mean = mean + parseFloat(self.data[i][t1]);
                 if(self.data[i][t1] < min)
-                    min = self.data[i][t1];
+                    min = parseFloat(self.data[i][t1]);
 
                 if(self.data[i][t1]>max)
-                    max = self.data[i][t1];
+                    max = parseFloat(self.data[i][t1]);
             }
         }
-
-        mean = mean/count;
+        mean = parseFloat(mean/count);
 
         background = svg.append("svg:g")
             .attr("class", "background")
@@ -236,9 +228,25 @@ function pc(){
     function brush() {
         var t1 =  $("#dropdown1 option:selected").text();
         
-        var max = d3.max(self.data, function(d){return d[t1]; });
-        var min = d3.min(self.data, function(d){return d[t1]; });
-        var mean = d3.mean(self.data, function(d){return d[t1]; });
+        var max = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var min = 10000;//d3.min(self.data, function(d){return d[t1]; });
+        var mean = 0;//d3.mean(self.data, function(d){return d[t1]; });
+
+        var count = 0;
+
+
+        for(var i=0; i<self.data.length; i++){
+            if(self.data[i][t1]!= ""){
+                count++;
+                mean = mean + parseFloat(self.data[i][t1]);
+                if(self.data[i][t1] < min)
+                    min = parseFloat(self.data[i][t1]);
+
+                if(self.data[i][t1]>max)
+                    max = parseFloat(self.data[i][t1]);
+            }
+        }
+        mean = parseFloat(mean/count);
 
         var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
             extents = actives.map(function(p) { return y[p].brush.extent(); });

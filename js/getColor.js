@@ -23,7 +23,7 @@ function getColor(d, min, max, mean){
              d< (max-rangeMax*2) ? colorArray[7] : colorArray[8];
     }
     else
-      return "green"; 
+      return "gray"; 
  
 
 
@@ -40,5 +40,5 @@ function getBrushColor(data,variable,d,min,max,mean){
             }
         }
 
-        return "green";
+        return "gray";
 };
