@@ -20,6 +20,7 @@
         <!--modules css-->
         <link rel="stylesheet" href="css/pc.css">
         <link rel="stylesheet" href="css/sp.css">
+        <link rel="stylesheet" href="css/pca.css">
         <link rel="stylesheet" href="css/map.css">
 
     <body>
