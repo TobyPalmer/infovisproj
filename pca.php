@@ -31,6 +31,7 @@
         <div id="wrap">
 
             <!-- Fixed navbar -->
+            <?php require('templates/header.php') ?>
    
             <!-- Begin page content -->
 
