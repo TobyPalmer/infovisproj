@@ -17,11 +17,12 @@ function pca(){
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom")
-        .ticks(10);
+        .ticks(0);
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .orient("left");
+        .orient("left")
+        .ticks(0);
 
     var svg = d3.select("#sp2").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -30,7 +31,7 @@ function pca(){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //Load data
-    d3.csv("data/dim3.csv", function(data) {
+    d3.csv("data/factbook.csv", function(data) {
         self.data = covariance(data);
 
         //console.log(data);
@@ -42,6 +43,7 @@ function pca(){
     function draw()
     {   
         var score = self.data.score.elements;
+        console.log(score);
         var maxy = 0;//d3.max(self.data, function(d){return d[t1]; });
         var miny = 10000;//d3.min(self.data, function(d){return d[t1]; });
         var maxx = 0;//d3.max(self.data, function(d){return d[t1]; });
@@ -121,8 +123,8 @@ function pca(){
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
             .attr("y", -margin.left)
-            .attr("x", 240-width*0.5)
-            .attr("dy", ".71em")
+            .attr("x", 300-width*0.5)
+            .attr("dy", "2.2em")
             .style("font-size", 12)
             .text("PC2 - " + (PC[1]*100).toFixed(2) + " % of variation");
             
@@ -197,11 +199,11 @@ function pca(){
         //console.log(avg);
 
         //Standardized data
-        var standard = standardize(value, avg, dimensions);
+        var standard = standardize(value, avg, dimensions-1);
         
         //covariance matrix and centered matrix
         //var cacdm = covAndCDMatrix(value, standard,avg,dimensions);
-        var cacdm = covAndCDMatrix(value, avg, dimensions);
+        var cacdm = covAndCDMatrix(value, avg, dimensions-1);
         
         centered = cacdm.bar;
         covarianceMatrix = cacdm.cov;
@@ -216,7 +218,7 @@ function pca(){
         dataPoints = centeredMatrix.multiply(evMatrix);
 
         //CorrelationMatrix
-        var correlation = correlationMatrix(covarianceMatrix, dimensions);
+        var correlation = correlationMatrix(covarianceMatrix, dimensions-1);
 
         var lambda = eig.lambda.x;
         for(var i = 0; i<lambda.length; i++){
