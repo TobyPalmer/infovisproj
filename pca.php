@@ -20,6 +20,7 @@
         <!--modules css-->
         <link rel="stylesheet" href="css/pc.css">
         <link rel="stylesheet" href="css/sp.css">
+        <link rel="stylesheet" href="css/pca.css">
         <link rel="stylesheet" href="css/map.css">
 
     <body>
@@ -39,6 +40,9 @@
                 <!-- row of columns -->
 
                 <div class="row">
+                <div id="mapDiv">
+                    <div id="sp2" style="height: 60vh; radius: 20px"></div>
+                </div>
                    <br>
                 <p>Här kan det stå lite awesome facts om PCA</p>
                 <br><br>
@@ -63,9 +67,13 @@
         <script src="js/vendor/colorbrewer.js"></script>
 
         <!--modules js-->
+        <script src="js/sylvester/sylvester.js"></script>
+        <script src="js/sylvester/sylvester.src"></script>
+        <script src="js/numeric-1.2.6.js"></script>
         <script src="js/pc.js"></script>
         <script src="js/sp.js"></script>
         <script src="js/map.js"></script>
+        <script src="js/pca.js"></script>
         <script src="js/main.js"></script>
         <script src="js/getColor.js"></script>
 

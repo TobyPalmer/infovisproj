@@ -30,13 +30,15 @@ function pca(){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //Load data
-    d3.csv("data/dim3.csv", function(data) {
-
+    d3.csv("data/factbook.csv", function(data) {
         self.data = covariance(data);
+
+        //console.log(data);
         draw();
 
     });
 
+    
     function draw()
     {   
         var score = self.data.score.elements;
@@ -185,52 +187,48 @@ function pca(){
         var centered;
         var centeredMatrix;
         var dataPoints;
-        var sum = 0;
+        var summa = 0;
         var covarianceMatrix;
         var plott = new Array();
         for(var val in value[0]){
             dimensions++;
         }
-
+        //dimensions = dimensions - 1;
         var avg = avgValue(value);
         //console.log(avg);
 
         //Standardized data
         var standard = standardize(value, avg, dimensions);
-
+        
         //covariance matrix and centered matrix
         //var cacdm = covAndCDMatrix(value, standard,avg,dimensions);
         var cacdm = covAndCDMatrix(value, avg, dimensions);
-
+        
         centered = cacdm.bar;
         covarianceMatrix = cacdm.cov;
 
+        
         //eigenvectors and eigenvalues from covariance matrix
         var eig = numeric.eig(covarianceMatrix);
 
         centeredMatrix = Matrix.create(centered);
         evMatrix = Matrix.create(eig.E.x);
-
+        console.log(eig);
+        
         //Scores, where every column is one principal component (PC1, PC2 etc..)
         dataPoints = centeredMatrix.multiply(evMatrix);
 
         //CorrelationMatrix
         var correlation = correlationMatrix(covarianceMatrix, dimensions);
 
-        var objInformation = {
-            "standard": standard,
-            "covariance": covarianceMatrix,
-            "correlation": correlation,
-            "score": dataPoints 
-        }
         var lambda = eig.lambda.x;
         for(var i = 0; i<lambda.length; i++){
-            sum = parseFloat(lambda[i]) + sum;
+            summa = parseFloat(lambda[i]) + summa;
         }
 
         var dataScore = new Array();
         for(var i = 0; i<lambda.length; i++){
-            dataScore[i] = lambda[i]/sum;
+            dataScore[i] = lambda[i]/summa;
         }  
         //console.log(dataScore);
         var objInformation = {
@@ -242,21 +240,19 @@ function pca(){
         }
         console.log(objInformation);
         return objInformation;
-        //centered = Matrix.create(cacdm.bar);
-        //covarianceMatrix = Matrix.create(cacdm.cov);
-
+        
     };
 
     function correlationMatrix(cov,dim){
 
         var corr = new Array();
 
-        for(var i = 0; i<dim; i++){
+        for(var i = 0; i<dim-1; i++){
             corr[i] = new Array();
         }
 
-        for(var i = 0;i<dim; i++){
-            for(var j = 0; j<dim; j++){
+        for(var i = 0;i<dim-1; i++){
+            for(var j = 0; j<dim-1; j++){
                 //console.log(Math.sqrt(cov[i][i]));
                 corr[i][j] = cov[i][j] / (Math.sqrt(cov[i][i])*Math.sqrt(cov[j][j])); 
             }
@@ -274,12 +270,20 @@ function pca(){
         }
 
         for(var val in value[0]){
-            for(var i = 0; i<value.length;i++){
-                stand[i][dim] = parseFloat(value[i][val]) - avg[val];
+            if(val != "Country"){
+                for(var i = 0; i<value.length;i++){
+                    if(value[i][val] == ""){
+                        value[i][val] = avg[val];
+                        stand[i][dim] = parseFloat(value[i][val]) - avg[val];
+                    }
+                    else{
+                        stand[i][dim] = parseFloat(value[i][val]) - avg[val];
+                    }
+                        
+                }
             }
             dim++;
         }
-        //console.log(stand);
         return stand;
     };
 
@@ -297,7 +301,7 @@ function pca(){
             "bar": "",
             "cov": ""
         };
-        for(var i = 0; i<dim; i++){
+        for(var i = 0; i<(dim-1); i++){
             covMatrix[i] = new Array();
         }
         for(var i = 0; i<value.length; i++){
@@ -305,33 +309,54 @@ function pca(){
         }
 
         for(var val in value[0]){
-            for(var val2 in value[0]){
+            if(val != "Country"){
+                for(var val2 in value[0]){
+                    if(val2 != "Country"){
+                        for(var i = 0; i<value.length;i++){
 
-                for(var i = 0; i<value.length;i++){
-                    if(val == val2){
-                        dimBar[i][dim2] = parseFloat(value[i][val]) - avg[val2];
+                            if((value[i][val] || value[i][val2]) == ""){
+                                value[i][val] = avg[val];
+                                value[i][val2] = avg[val2];
+
+                                if(val == val2){
+                                dimBar[i][dim2] = parseFloat(value[i][val]) - avg[val2];
+                                }
+
+                                faktor1 = parseFloat(value[i][val]) - avg[val];
+                                faktor2 = parseFloat(value[i][val2]) - avg[val2];
+                                
+                                sum += (faktor1*faktor2);
+                                faktor1 = 0;
+                                faktor2 = 0;
+
+                            }
+                            else{
+                                if(val == val2){
+                                    dimBar[i][dim2] = parseFloat(value[i][val]) - avg[val2];
+                                }
+
+                                faktor1 = parseFloat(value[i][val]) - avg[val];
+                                faktor2 = parseFloat(value[i][val2]) - avg[val2];
+                                
+                                sum += (faktor1*faktor2);
+                                faktor1 = 0;
+                                faktor2 = 0;
+                            }
+                        }
+
+                        sum = sum / (value.length-1);
+                        covMatrix[dim1][dim2] = sum;
+                        dim2++;
+                        sum = 0;
+                        //console.log(val2);
                     }
-                    /*console.log(val + ": " + value[i][val] + " - " + avg[val]);
-                    console.log(val2 + ": " + value[i][val2] + " - " + avg[val2]);*/
-
-                    faktor1 = parseFloat(value[i][val]) - avg[val];
-                    faktor2 = parseFloat(value[i][val2]) - avg[val2];
-                    
-                    sum += (faktor1*faktor2);
-                    faktor1 = 0;
-                    faktor2 = 0;
 
                 }
-                
-                sum = sum / (value.length-1);
-                covMatrix[dim1][dim2] = sum;
-                dim2++;
-                sum = 0;
-            }
-            dim1++;
-            dim2 = 0;
-        }
 
+                dim1++;
+                dim2 = 0;
+            }
+        }
         obj.bar = dimBar;
         obj.cov = covMatrix;
         return obj;
@@ -343,17 +368,19 @@ function pca(){
         var first = 0;
         var avg = new Array();
         for(var j in value[0]){
-            for(var i = 0; i<size;i++){
+            if(j != "Country"){
+                for(var i = 0; i<size;i++){
+                    if(value[i][j] != "")
+                        first = parseFloat(value[i][j]) + first;
 
-                first = parseFloat(value[i][j]) + first;
+                }
 
+                avg[j] = first/size;
+                first = 0; 
             }
-
-            avg[j] = first/size;
-            first = 0; 
+            
             
         }
-        //console.log(avg);
         return avg;
     };
 
