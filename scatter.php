@@ -58,19 +58,23 @@
                             </SELECT>
                         <br>
                          <B>Scatter plot radius</B> <BR>
-                        <SELECT class id="drop1" NAME="scat">
+                        <SELECT class id="drop3" NAME="scat">
                             <OPTION SELECTED>Select data for radius
                             </SELECT>
                         <br>
                          <B>Scatter plot color</B> <BR>
-                        <SELECT class id="drop1" NAME="scat">
+                        <SELECT class id="drop4" NAME="scat">
                             <OPTION SELECTED>Select data for color
                             </SELECT>
                         <br>
-                        <br><br>
+                        <br>
 
                         <button class id="but" onclick="drawFunction()">Go</button>
                         <button class id="but2" onclick="clearFunction()">Clear</button>
+                        <br>
+                        <H2>Scatter plot</H2>
+                        <p>The scatter plot is used to plot data in two dimensions (x and y axis). There are a few measures to fit more dimensions into this plot. In the dropdown menues above you can chose what dimensions to use on x and y axis and also what other dimensions should decide the radius and the color (fading from yellow/biege to red where yellow represents a low value)</p>
+                        <br>
                     </div>
                    
 
