@@ -54,8 +54,6 @@ function pc(){
         var t7 =  $("#dropdown7 option:selected").text();
         var t8 =  $("#dropdown8 option:selected").text();
         
-
-        
         var notTheese = [];
         var theese = [];
 
@@ -301,6 +299,7 @@ function pc(){
     this.selectLine = function(value){
         //...
         //console.log(value["Country"]);
+        console.log(value);
         d3.selectAll(".dot").style("opacity", function(d){
             if(value["Country"]==d["Country"]){
                 return 1;
@@ -315,7 +314,7 @@ function pc(){
                 return 1;
             }
             else
-                return 0.1;
+                return 0.2;
         })
 
         foreground.style("display", function(d) {
@@ -329,7 +328,6 @@ function pc(){
             else
                 return 0.1;
         });
-        
         
     };
     
