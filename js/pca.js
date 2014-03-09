@@ -4,7 +4,7 @@ function pca(){
 
     var sp2Div = $("#sp2");
 
-    var margin = {top: 20, right: 120, bottom: 30, left: 120},
+    var margin = {top: 20, right: 120, bottom: 40, left: 120},
         width = sp2Div.width() - margin.right - margin.left,
         height = sp2Div.height() - margin.top - margin.bottom;
 
@@ -49,7 +49,7 @@ function pca(){
         var meanx = 0;//d3.mean(self.data, function(d){return d[t1]; });
         var meany = 0;
 
-        var lx = self.data.pcPercent;
+        var PC = self.data.pcPercent;
 
         var xLabel = 0;
         var yLabel = 1;
@@ -85,13 +85,13 @@ function pca(){
         /*console.log(maxx + " <- maxx, maxy -> " + maxy);
         console.log(minx + " <- minx, miny -> " + miny);*/
 
-        x.domain([minx, maxx]/*d3.max(data, function(d){
+        x.domain([minx/*/(maxx-minx)*/, maxx/*/(maxx-minx)*/]/*d3.max(data, function(d){
             //console.log(d[xLabel]);
             return d[xLabel];
         })]*/
         );
         
-        y.domain([miny, maxy]);/*d3.max(data, function(d){
+        y.domain([miny/*/(maxy-miny)*/, maxy/*/(maxy-miny)*/]);/*d3.max(data, function(d){
             //console.log(d[yLabel]);
             //console.log(yLabel);
             return d[yLabel];
@@ -111,7 +111,7 @@ function pca(){
             .attr("x", width*0.5-40)
             .attr("y", margin.bottom)
             .style("font-size", 12)
-            .text(lx[0]*100);
+            .text("PC1 - " + (PC[0]*100).toFixed(2) + " % of variation");
             
         // Add y axis and title.
         svg.append("g")
@@ -120,11 +120,11 @@ function pca(){
             .append("text")
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
-            .attr("y", -width)
-            .attr("x", 2)
+            .attr("y", -margin.left)
+            .attr("x", 240-width*0.5)
             .attr("dy", ".71em")
             .style("font-size", 12)
-            .text(lx[1]);
+            .text("PC2 - " + (PC[1]*100).toFixed(2) + " % of variation");
             
 
         var tooltip = d3.select("#sp2")
@@ -198,16 +198,15 @@ function pca(){
         //console.log(avg);
 
         //Standardized data
-        var standard = standardize(value, avg, dimensions);
+        var standard = standardize(value, avg, dimensions-1);
         
         //covariance matrix and centered matrix
         //var cacdm = covAndCDMatrix(value, standard,avg,dimensions);
-        var cacdm = covAndCDMatrix(value, avg, dimensions);
+        var cacdm = covAndCDMatrix(value, avg, dimensions-1);
         
         centered = cacdm.bar;
         covarianceMatrix = cacdm.cov;
 
-        
         //eigenvectors and eigenvalues from covariance matrix
         var eig = numeric.eig(covarianceMatrix);
 
@@ -219,7 +218,7 @@ function pca(){
         dataPoints = centeredMatrix.multiply(evMatrix);
 
         //CorrelationMatrix
-        var correlation = correlationMatrix(covarianceMatrix, dimensions);
+        var correlation = correlationMatrix(covarianceMatrix, dimensions-1);
 
         var lambda = eig.lambda.x;
         for(var i = 0; i<lambda.length; i++){
@@ -229,8 +228,8 @@ function pca(){
         var dataScore = new Array();
         for(var i = 0; i<lambda.length; i++){
             dataScore[i] = lambda[i]/summa;
-        }  
-        //console.log(dataScore);
+        }
+
         var objInformation = {
             "standard": standard,
             "covariance": covarianceMatrix,
@@ -247,13 +246,12 @@ function pca(){
 
         var corr = new Array();
 
-        for(var i = 0; i<dim-1; i++){
+        for(var i = 0; i<dim; i++){
             corr[i] = new Array();
         }
 
-        for(var i = 0;i<dim-1; i++){
-            for(var j = 0; j<dim-1; j++){
-                //console.log(Math.sqrt(cov[i][i]));
+        for(var i = 0;i<dim; i++){
+            for(var j = 0; j<dim; j++){
                 corr[i][j] = cov[i][j] / (Math.sqrt(cov[i][i])*Math.sqrt(cov[j][j])); 
             }
         }
@@ -301,7 +299,7 @@ function pca(){
             "bar": "",
             "cov": ""
         };
-        for(var i = 0; i<(dim-1); i++){
+        for(var i = 0; i<dim; i++){
             covMatrix[i] = new Array();
         }
         for(var i = 0; i<value.length; i++){
