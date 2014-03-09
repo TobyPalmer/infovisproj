@@ -30,7 +30,7 @@ function pca(){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //Load data
-    d3.csv("data/factbook.csv", function(data) {
+    d3.csv("data/dim3.csv", function(data) {
         self.data = covariance(data);
 
         //console.log(data);
@@ -133,7 +133,6 @@ function pca(){
             .style("visability", "hidden")
             .style("z-index", "3")
             .style("background-color", "orange");
-
                 
         // Add the scatter dots.
         svg.selectAll(".dot")
@@ -198,11 +197,11 @@ function pca(){
         //console.log(avg);
 
         //Standardized data
-        var standard = standardize(value, avg, dimensions-1);
+        var standard = standardize(value, avg, dimensions);
         
         //covariance matrix and centered matrix
         //var cacdm = covAndCDMatrix(value, standard,avg,dimensions);
-        var cacdm = covAndCDMatrix(value, avg, dimensions-1);
+        var cacdm = covAndCDMatrix(value, avg, dimensions);
         
         centered = cacdm.bar;
         covarianceMatrix = cacdm.cov;
@@ -212,13 +211,12 @@ function pca(){
 
         centeredMatrix = Matrix.create(centered);
         evMatrix = Matrix.create(eig.E.x);
-        console.log(eig);
         
         //Scores, where every column is one principal component (PC1, PC2 etc..)
         dataPoints = centeredMatrix.multiply(evMatrix);
 
         //CorrelationMatrix
-        var correlation = correlationMatrix(covarianceMatrix, dimensions-1);
+        var correlation = correlationMatrix(covarianceMatrix, dimensions);
 
         var lambda = eig.lambda.x;
         for(var i = 0; i<lambda.length; i++){
@@ -235,9 +233,10 @@ function pca(){
             "covariance": covarianceMatrix,
             "correlation": correlation,
             "pcPercent": dataScore,
-            "score": dataPoints 
+            "score": dataPoints,
+            "eigvector": evMatrix 
         }
-        console.log(objInformation);
+
         return objInformation;
         
     };
