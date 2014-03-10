@@ -119,8 +119,8 @@ body {
 
 /* Set the fixed height of the footer here */
 #footer {
-    height: 60px;
-    background-color: #DBEEFF;
+    height: 0px;
+    background-color: #000;
 }
 
 
