@@ -143,6 +143,9 @@ body {
     height:218px;
     /*background-color: black;*/
     background-image: url("../scale.png");
+    background-repeat: no-repeat;
+    visibility: hidden;
+
     padding: 0px;
 
 }
