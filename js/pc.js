@@ -43,6 +43,7 @@ function pc(){
         self.data = data;
         
         $("#btn").on("click", function(d){
+            d3.select("#scale").style("visibility", "visible");
 
 
         var t1 =  $("#dropdown1 option:selected").text();
@@ -297,8 +298,9 @@ function pc(){
 
     }
 
+    
 
-    //method for selecting the pololyne from other components	
+    //method for selecting the pololyne from other components   
     this.selectLine = function(value){
         //...
         //console.log(value["Country"]);
