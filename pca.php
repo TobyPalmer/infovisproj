@@ -44,13 +44,12 @@
                     <div id="menu" class="col-md-4 col-sm-4 col-xs-4">
                         <div id="pcaText">
                         <h2>Principal Components Analysis (PCA)</h2>
-                            <p>Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. 
-                                Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd 
-                                boksättare tog att antal bokstäver och blandade dem för att göra ett 
-                                provexemplar av en bok. Lorem ipsum har inte bara överlevt fem århundraden, 
-                                utan även övergången till elektronisk typografi utan större förändringar. 
-                                Det blev allmänt känt på 1960-talet i samband med lanseringen av Letraset-ark
-                                med avsnitt av Lorem Ipsum, och senare med mjukvaror som Aldus PageMaker.</p>
+                            <p>The principal component analysis is a techique that allows us to reduce multi-dimensional dataset by using eigenvectors, eigenvalues
+                            and singularity decomposition. It is possible to plot the data into two dimensions (x and y axis). The axis are
+                            represented as the eigenvectors and are called Principal components (PC). The values along the axis are represented
+                            as the eigenvalues and are also known as the variation.</p>
+                            <p>By using PCA it will be easier to find relations between the dimensions.</p>
+                        </div>
                         </div>
                     </div>
                     
