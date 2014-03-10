@@ -94,7 +94,7 @@
                             <OPTION SELECTED> Select data to look at
     
                         </SELECT>
-
+                        <BR>
                         <button class id="btn" onclick="drawPc()">Draw</button>
                     </div>
                    
