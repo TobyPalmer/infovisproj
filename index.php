@@ -95,13 +95,15 @@
     
                         </SELECT>
 
-                        <button class id="btn">Click me</button>
+                        <button class id="btn" onclick="drawPc()">Draw</button>
                     </div>
                    
 
 
-                    <div id="map" class="col-md-8 col-sm-8 col-xs-8">
+                    <div id="map" class="col-md-7 col-sm-7 col-xs-7">
                     </div>
+
+                    <div id="scale" class="col-md-1 col-sm-1 col-xs-1"></div>
                   
 
                 </div>

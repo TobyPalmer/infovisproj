@@ -139,6 +139,14 @@ body {
 
 }
 
+#scale {
+    height:218px;
+    /*background-color: black;*/
+    background-image: url("../scale.png");
+    padding: 0px;
+
+}
+
 
 
 /* Custom page CSS
