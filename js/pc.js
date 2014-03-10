@@ -42,8 +42,8 @@ function pc(){
 
         self.data = data;
         
-        $("#btn").on("click", function(d){
-            d3.select("#scale").style("visibility", "visible");
+        // $("#btn").on("click", function(d){
+        d3.select("#scale").style("visibility", "visible");
 
 
         var t1 =  $("#dropdown1 option:selected").text();
@@ -101,7 +101,7 @@ function pc(){
         
             draw();
 
-        });
+        // });
     });
 
     function draw(){
