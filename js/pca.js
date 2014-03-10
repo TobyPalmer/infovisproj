@@ -52,8 +52,8 @@ function pca(){
         var PC = self.data.pcPercent;
 
         //dont make xLabel or yLabel equals to 0. (0 = the country)
-        var xLabel = 23;
-        var yLabel = 30;
+        var xLabel = 1;
+        var yLabel = 2;
         
         var count = 0;
 
@@ -120,7 +120,7 @@ function pca(){
             .append("div")
             .style("position", "absolute")
             .style("visability", "hidden")
-            .style("z-index", "100")
+            .style("z-index", "10000")
             .style("background", "white");
                 
         // Add the scatter dots.
@@ -133,13 +133,13 @@ function pca(){
             return width/(maxx-minx)*(d[xLabel]-minx);})
             .attr("cy", function(d){
             return height/(maxy-miny)*(maxy-d[yLabel]);})
-            .attr("r", 2)
+            .attr("r", 1)
 
             //tooltip
             .on("mouseover", function(d){
 
                 tooltip.transition()        
-                .duration(200)
+                .duration(10000)
                 .style("visibility", "visible")          
                 .style("opacity", .85)
               tooltip.html("<b>" + d[0] + "</b>" + "</br> x: " + d[xLabel].toFixed(2) + "</br> y: " + d[yLabel].toFixed(2));
