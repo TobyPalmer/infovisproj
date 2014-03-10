@@ -7,7 +7,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Project</a>
+                        <a class="navbar-brand">The Factbook</a>
                     </div>
 
                     <div class="collapse navbar-collapse" id="navbar-collapse-target">

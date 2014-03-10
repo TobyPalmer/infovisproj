@@ -76,7 +76,6 @@ function map(){
         //...
         //console.log(sp1.getData());
         $("#btn").on("click", function(d){
-            console.log("yolo");
             draw(countries);
         });
         
@@ -132,6 +131,13 @@ function map(){
         //console.log(colorbrewer.YlGn[3][0]);
 		//console.log(cc);
         //...
+         var tooltip = d3.select("#map")
+            .append("div")
+            .style("position", "absolute")
+            .style("visability", "hidden")
+            .style("z-index", "3")
+            .style("font-size", "15")
+            //.style("background-color", "orange");
 
         country.enter().insert("path")
             //.data(d3.entries.colorbrewer)
@@ -139,8 +145,7 @@ function map(){
             .attr("d", path)
             .attr("id", function(d) { return d.id; })
             .attr("title", function(d) { 
-                //return d.properties.name; })
-                return "jasdkn"; })
+                return d.properties.name; })
             //country color
             .style("fill", function(d,i){
                 //console.log(d.properties);
@@ -154,14 +159,23 @@ function map(){
                     }
                 }
 
-                return "green";
+                return "gray";
                 
-                
-                //return getColor(d[t1], min, max);
                 
             })
             //...
             //tooltip
+            .on("mouseover", function(d,i){
+                for(var j = 0; j<self.data.length; j++){
+                 
+                    if(self.data[j]["Country"]==d.properties.name){
+                        return tooltip.style("visibility", "visible")
+                              .text(self.data[j]["Country"] + "  " + t1 + ": " + self.data[j][t1]);
+
+                    }
+                }
+
+            })
             .on("mousemove", function(d) {
                 //...
             })
@@ -173,11 +187,10 @@ function map(){
                 for(var j = 0; j<self.data.length; j++){
                  
                     if(self.data[j]["Country"]==d.properties.name){
+                        pc1.selectLine(self.data[j]);
 
-                        alert(d.properties.name + ", " + t1 + ": " + self.data[j][t1]);
                     }
                 }
-
                 //...
             });
 

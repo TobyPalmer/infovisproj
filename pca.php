@@ -20,6 +20,7 @@
         <!--modules css-->
         <link rel="stylesheet" href="css/pc.css">
         <link rel="stylesheet" href="css/sp.css">
+        <link rel="stylesheet" href="css/pca.css">
         <link rel="stylesheet" href="css/map.css">
 
     <body>
@@ -39,9 +40,24 @@
                 <!-- row of columns -->
 
                 <div class="row">
-                   <br>
-                <p>Här kan det stå lite awesome facts om PCA</p>
-                <br><br>
+                
+                    <div id="menu" class="col-md-4 col-sm-4 col-xs-4">
+                        <div id="pcaText">
+                        <h2>Principal Components Analysis (PCA)</h2>
+                            <p>Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. 
+                                Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd 
+                                boksättare tog att antal bokstäver och blandade dem för att göra ett 
+                                provexemplar av en bok. Lorem ipsum har inte bara överlevt fem århundraden, 
+                                utan även övergången till elektronisk typografi utan större förändringar. 
+                                Det blev allmänt känt på 1960-talet i samband med lanseringen av Letraset-ark
+                                med avsnitt av Lorem Ipsum, och senare med mjukvaror som Aldus PageMaker.</p>
+                        </div>
+                    </div>
+                    
+                <div id="mapDiv">
+                    <div id="sp2" style="height: 60vh"></div>
+                </div>
+                   
                 </div>
             </div>
 
@@ -63,9 +79,13 @@
         <script src="js/vendor/colorbrewer.js"></script>
 
         <!--modules js-->
+        <script src="js/sylvester/sylvester.js"></script>
+        <script src="js/sylvester/sylvester.src"></script>
+        <script src="js/numeric-1.2.6.js"></script>
         <script src="js/pc.js"></script>
         <script src="js/sp.js"></script>
         <script src="js/map.js"></script>
+        <script src="js/pca.js"></script>
         <script src="js/main.js"></script>
         <script src="js/getColor.js"></script>
 

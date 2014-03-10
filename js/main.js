@@ -6,3 +6,5 @@ var map = new map();
 	var pc1 = new pc();
 //}
 
+var pca = new pca();
+

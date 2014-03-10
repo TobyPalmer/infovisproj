@@ -1,0 +1,13 @@
+#mapDiv{
+    position: relative;
+    margin-top: 50px;
+    width: 70%;
+    left:5%;
+    margin-left: -5%;
+    float:left;
+}
+#pcaText{
+    margin-top: 50px;
+    height: 200px;
+    float: left;
+}

@@ -6,10 +6,6 @@ function getColor(d, min, max, mean){
 	rangeMin = rangeMin/10;
 	rangeMax = rangeMax/10;
 
-  if(d == ""){
-    console.log("KJAGSKJDAOBSHFLOASF");
-  }
-
     var colorArray = d3.entries(colorbrewer)[10].value[9];
     
     if(d != ""){
@@ -25,8 +21,6 @@ function getColor(d, min, max, mean){
     else
       return "gray"; 
  
-
-
 
 };
 

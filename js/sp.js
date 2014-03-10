@@ -139,7 +139,7 @@ function sp(){
 
     });
 
-    this.draw = function(xLabel, yLabel)
+    this.draw = function(xLabel, yLabel, radius, colour)
     {
         //var self = this;
         //self.data = getData();
@@ -158,46 +158,81 @@ function sp(){
         var miny = 999999999999;//d3.min(self.data, function(d){return d[t1]; });
         var maxx = 0;//d3.max(self.data, function(d){return d[t1]; });
         var minx = 999999999999;//d3.min(self.data, function(d){return d[t1]; });
-        var meanx = 0;//d3.mean(self.data, function(d){return d[t1]; });
-        var meany = 0;
+        //var meanx = 0;//d3.mean(self.data, function(d){return d[t1]; });
+        //var meany = 0;
+        var maxr = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var minr = 999999999999;//d3.min(self.data, function(d){return d[t1]; });
+        var maxc = 0;//d3.max(self.data, function(d){return d[t1]; });
+        var minc = 999999999999;//d3.min(self.data, function(d){return d[t1]; });
+        //var meanr = 0;//d3.mean(self.data, function(d){return d[t1]; });
+        var meanc = 0;
         
         var count = 0;
         console.log(yLabel + " <- y, x -> " + xLabel);
+
+
         for(var i=0; i<data.length; i++){
             if(data[i][yLabel]!= ""){
                 //count++;
                 if(data[i][yLabel] < miny)
-                    miny = data[i][yLabel];
+                    miny = parseFloat(data[i][yLabel]);
 
                 if(data[i][yLabel]>maxy)
-                    maxy = data[i][yLabel];
+                    maxy = parseFloat(data[i][yLabel]);
                 //console.log(maxy);
             }
         }
         //meanx = mean/count;
 
         for(var i=0; i<data.length; i++){
-            if(data[i][xLabel]!= ""){
+            if(data[i][radius]!= ""){
                 count++;
+                if(data[i][radius] < minr)
+                    minr = parseFloat(data[i][radius]);
+
+                if(data[i][radius]>maxr)
+                    maxr = parseFloat(data[i][radius]);
+               //console.log(max2 + "helu");
+            }
+        }
+
+        for(var i=0; i<data.length; i++){
+            if(data[i][colour]!= ""){
+                count++;
+                meanc = meanc + parseFloat(data[i][colour]);
+                if(data[i][colour] < minc)
+                    minc = parseFloat(data[i][colour]);
+
+                if(data[i][colour] > maxc)
+                    maxc = parseFloat(data[i][colour]);
+            }
+        }
+
+
+        meanc = parseFloat(meanc/count);
+
+        for(var i=0; i<data.length; i++){
+            if(data[i][xLabel]!= ""){
+                //count++;
                 if(data[i][xLabel] < minx)
-                    minx = data[i][xLabel];
+                    minx = parseFloat(data[i][xLabel]);
 
                 if(data[i][xLabel]>maxx)
-                    maxx = data[i][xLabel];
+                    maxx = parseFloat(data[i][xLabel]);
                //console.log(max2 + "helu");
             }
         }
 
         //console.log(maxx + " <- maxx, maxy -> " + maxy);
-        console.log(minx + " <- minx, miny -> " + miny);
+        //console.log(minx + " <- minx, miny -> " + miny);
+        //console.log(minc + " <- minc, minr -> " + minr);
 
-        x.domain([minx, maxx*1.2]/*d3.max(data, function(d){
+        x.domain([minx, maxx]/*d3.max(data, function(d){
             //console.log(d[xLabel]);
             return d[xLabel];
         })]*/
         );
-        
-        y.domain([miny, maxy*1.2]);/*d3.max(data, function(d){
+        y.domain([miny, maxy]);/*d3.max(data, function(d){
             //console.log(d[yLabel]);
             //console.log(yLabel);
             return d[yLabel];
@@ -215,7 +250,7 @@ function sp(){
             .call(xAxis)
             .append("text")
             .attr("class", "label")
-            .attr("x", width-40)
+            .attr("x", margin.left)
             .attr("y", margin.bottom)
             .style("font-size", 12)
             .text(xLabel);
@@ -228,7 +263,7 @@ function sp(){
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
             .attr("y", -margin.left)
-            .attr("x", -width*0.5)
+            .attr("x", -width)
             .attr("dy", ".71em")
             .style("font-size", 12)
             .text(yLabel);
@@ -238,8 +273,8 @@ function sp(){
             .append("div")
             .style("position", "absolute")
             .style("visability", "hidden")
-            .style("z-index", "3")
-            .style("background-color", "orange");
+            .style("z-index", "3") 
+            .style("background-color", "#a3a3a3");
 
                 
         // Add the scatter dots.
@@ -250,8 +285,14 @@ function sp(){
 
             .attr("cx", function(d){
                 //console.log(d[xLabel] + " <- data, land -> " + d["Country"]);
-            if(d[xLabel]!="")
-                return 100 + (width-100)*(d[xLabel]/(maxx*1.2));// d[xLabel]/maxx;})
+            if(d[xLabel]!=""){
+                var number = ((d[xLabel]-minx)/(maxx-minx))*width
+                //if(d[xLabel]>0)
+                return number;
+                //else
+                //return 
+                //return //margin.left + (width-margin.left-margin.right)*(d[xLabel]/(maxx));// d[xLabel]/maxx;})
+            }
             else
             {
                 //console.log("kaos")
@@ -260,17 +301,33 @@ function sp(){
 
             .attr("cy", function(d){
             if(d[yLabel]!="")
-            return height - (height)*(d[yLabel]/(maxy*1.2));
+               // ((d[xLabel]-minx)/(maxx-minx))*width;
+            return height - (height)*((d[yLabel]-miny)/(maxy-miny));
             else
             {
                 //console.log("kaos2")
                 return 10000;
             }})
 
-            .attr("r", 4)
+            .attr("r", function(d) {
+                //console.log(d[radius]);
+                if(d[radius] == "")
+                    return "0";
+                else if(d[radius] < maxr*0.2)
+                    return "2";
+                else if(d[radius] < maxr*0.4)
+                    return "3";
+                else if(d[radius] < maxr*0.6)
+                    return "4";
+                else if(d[radius] < maxr*0.8)
+                    return "5";
+                else if(d[radius] < maxr+1)
+                    return "6";
+                })
+
             .style("fill", function(d){
                 //console.log(xLabel);
-                return getColor(d["Country"].length);
+                return getColor(d[colour], minc, maxc, meanc);
             })
 
 
@@ -284,9 +341,10 @@ function sp(){
                 tooltip.transition()        
                 .duration(200)
                 .style("visibility", "visible")          
-                .style("opacity", .9);  
+                .style("opacity", .85);  
 
-                tooltip.html(d["Country"] + "<br/>" + d[xLabel] +  ", " + d[yLabel])  
+                tooltip.html(d["Country"] + "<br/>" + xLabel + ": " + d[xLabel] +  ", <br/>" +  yLabel + ": " + d[yLabel]
+                                + "<br/>" + radius + ": " + d[radius] +  ", <br/>" +  colour + ": " + d[colour])  
                 //.style("left", (d3.event.pageX) + "px")     
                 //.style("top", (d3.event.pageY - 28) + "px");    
                // return tooltip.style("visibility", "visible")
