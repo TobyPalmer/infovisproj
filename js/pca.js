@@ -17,12 +17,12 @@ function pca(){
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom")
-        .ticks(0);
+        .ticks(1);
 
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
-        .ticks(0);
+        .ticks(1);
 
     var svg = d3.select("#sp2").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -35,42 +35,37 @@ function pca(){
         self.data = covariance(data);
 
         //console.log(data);
-        draw();
+        draw(data);
 
     });
 
     
-    function draw()
+    function draw(data)
     {   
         var score = self.data.score.elements;
-        console.log(score);
         var maxy = 0;//d3.max(self.data, function(d){return d[t1]; });
         var miny = 10000;//d3.min(self.data, function(d){return d[t1]; });
         var maxx = 0;//d3.max(self.data, function(d){return d[t1]; });
         var minx = 10000;//d3.min(self.data, function(d){return d[t1]; });
         var meanx = 0;//d3.mean(self.data, function(d){return d[t1]; });
         var meany = 0;
-
         var PC = self.data.pcPercent;
 
-        var xLabel = 0;
-        var yLabel = 1;
+        //dont make xLabel or yLabel equals to 0. (0 = the country)
+        var xLabel = 23;
+        var yLabel = 30;
         
         var count = 0;
-        //console.log(yLabel + " <- y, x -> " + xLabel);
 
         for(var i=0; i<score.length; i++){
             if(score[i][yLabel]!= ""){
-                //count++;
                 if(score[i][yLabel] < miny)
                     miny = score[i][yLabel];
 
                 if(score[i][yLabel]>maxy)
                     maxy = score[i][yLabel];
-                //console.log(maxy);
             }
         }
-        //meanx = mean/count;
 
         for(var i=0; i<score.length; i++){
             if(score[i][xLabel]!= ""){
@@ -80,12 +75,8 @@ function pca(){
 
                 if(score[i][xLabel]>maxx)
                     maxx = score[i][xLabel];
-               //console.log(max2 + "helu");
             }
         }
-
-        /*console.log(maxx + " <- maxx, maxy -> " + maxy);
-        console.log(minx + " <- minx, miny -> " + miny);*/
 
         x.domain([minx/*/(maxx-minx)*/, maxx/*/(maxx-minx)*/]/*d3.max(data, function(d){
             //console.log(d[xLabel]);
@@ -99,10 +90,6 @@ function pca(){
             return d[yLabel];
         })]);*/
 
-        //min
-
-        //meanx = mean/count;
-
         // Add x axis and title.
         svg.append("g")
             .attr("class", "x axis")
@@ -113,7 +100,7 @@ function pca(){
             .attr("x", width*0.5-40)
             .attr("y", margin.bottom)
             .style("font-size", 12)
-            .text("PC1 - " + (PC[0]*100).toFixed(2) + " % of variation");
+            .text("PC1 - " + (PC[xLabel-1]*100).toFixed(2) + " % of variation");
             
         // Add y axis and title.
         svg.append("g")
@@ -122,19 +109,19 @@ function pca(){
             .append("text")
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
-            .attr("y", -margin.left)
-            .attr("x", 300-width*0.5)
+            .attr("y", -margin.left+60)
+            .attr("x", -width*0.5+60)
             .attr("dy", "2.2em")
             .style("font-size", 12)
-            .text("PC2 - " + (PC[1]*100).toFixed(2) + " % of variation");
+            .text("PC2 - " + (PC[yLabel-1]*100).toFixed(2) + " % of variation");
             
 
         var tooltip = d3.select("#sp2")
             .append("div")
             .style("position", "absolute")
             .style("visability", "hidden")
-            .style("z-index", "3")
-            .style("background-color", "orange");
+            .style("z-index", "100")
+            .style("background", "white");
                 
         // Add the scatter dots.
         svg.selectAll(".dot")
@@ -147,36 +134,25 @@ function pca(){
             .attr("cy", function(d){
             return height/(maxy-miny)*(maxy-d[yLabel]);})
             .attr("r", 2)
-            /*.style("fill", function(d){
-                //console.log(xLabel);
-                return getColor(d["Country"].length);
-            })*/
-
-
-
-            //Define the x and y coordinate data values for the dots
-            //...
-
 
             //tooltip
             .on("mouseover", function(d){
-                //tooltip.transition()        
-                //.duration(200)      
-                //.style("opacity", .9);      
-              return  tooltip.html(d["Country"] + "<br/>" + d[xLabel] +  ", " + d[yLabel])
-                .style("visibility", "visible")
-                .style("left", (d3.event.pageX - width) + "px")     
-                .style("top", (d3.event.pageY - 28) + "px");    
-               // return tooltip.style("visibility", "visible")
-                 //             .text(d["Country"]);
+
+                tooltip.transition()        
+                .duration(200)
+                .style("visibility", "visible")          
+                .style("opacity", .85)
+              tooltip.html("<b>" + d[0] + "</b>" + "</br> x: " + d[xLabel].toFixed(2) + "</br> y: " + d[yLabel].toFixed(2));
             })
-            .on("mousemove", function(){return tooltip.style("top",
-                (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+            .on("mousemove", function(){
+                tooltip.style("top", (d3.event.pageY-100)+"px")
+                        .style("left",(d3.event.pageX-width+100)+"px");
+            })
             .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
             .on("click",  function(d) {
                 //...    
-                alert(d["Country"] + ":\n" + xLabel + ": " + d[xLabel] +  ", \n" + yLabel + ": " + d[yLabel]);
+                alert(d[0] + ":\n" + xLabel + ": " + d[xLabel] +  ", \n" + yLabel + ": " + d[yLabel]);
 
             });
     };
@@ -194,16 +170,18 @@ function pca(){
         for(var val in value[0]){
             dimensions++;
         }
-        //dimensions = dimensions - 1;
+
+        dimensions = dimensions-1; //comment this if its not factbook.csv
+
         var avg = avgValue(value);
         //console.log(avg);
 
         //Standardized data
-        var standard = standardize(value, avg, dimensions-1);
+        var standard = standardize(value, avg, dimensions);
         
         //covariance matrix and centered matrix
         //var cacdm = covAndCDMatrix(value, standard,avg,dimensions);
-        var cacdm = covAndCDMatrix(value, avg, dimensions-1);
+        var cacdm = covAndCDMatrix(value, avg, dimensions);
         
         centered = cacdm.bar;
         covarianceMatrix = cacdm.cov;
@@ -216,9 +194,15 @@ function pca(){
         
         //Scores, where every column is one principal component (PC1, PC2 etc..)
         dataPoints = centeredMatrix.multiply(evMatrix);
+        var country = new Array();
+        for(var i = 0; i<value.length;i++){
+            //country[i] = value[i]["Country"];
+            dataPoints.elements[i].unshift(value[i]["Country"]);
 
+        }
+        console.log(dataPoints);
         //CorrelationMatrix
-        var correlation = correlationMatrix(covarianceMatrix, dimensions-1);
+        var correlation = correlationMatrix(covarianceMatrix, dimensions);
 
         var lambda = eig.lambda.x;
         for(var i = 0; i<lambda.length; i++){
@@ -238,7 +222,7 @@ function pca(){
             "score": dataPoints,
             "eigvector": evMatrix 
         }
-
+        console.log(objInformation);
         return objInformation;
         
     };
@@ -347,7 +331,6 @@ function pca(){
                         covMatrix[dim1][dim2] = sum;
                         dim2++;
                         sum = 0;
-                        //console.log(val2);
                     }
 
                 }
