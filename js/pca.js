@@ -171,7 +171,7 @@ function pca(){
             dimensions++;
         }
 
-        dimensions = dimensions-1; //comment this if its not factbook.csv
+        dimensions = dimensions-1; //comment this if its not factbook.csv <-
 
         var avg = avgValue(value);
         //console.log(avg);
