@@ -145,8 +145,8 @@ function pca(){
               tooltip.html("<b>" + d[0] + "</b>" + "</br> x: " + d[xLabel].toFixed(2) + "</br> y: " + d[yLabel].toFixed(2));
             })
             .on("mousemove", function(){
-                tooltip.style("top", (d3.event.pageY-100)+"px")
-                        .style("left",(d3.event.pageX-width+100)+"px");
+                tooltip.style("top", (d3.event.pageY-120)+"px")
+                        .style("left",(d3.event.pageX-width+150)+"px");
             })
             .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
