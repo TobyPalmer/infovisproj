@@ -162,6 +162,9 @@ function pc(){
 
             .style("stroke", function(d,i){
                 //return getColor(d["Country"].length);
+                if(d[i]=="")
+                    return "gray";
+                
                 return getColor(d[t1],min,max,mean);
             })
 
