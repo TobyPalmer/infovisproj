@@ -40,12 +40,24 @@
                 <!-- row of columns -->
 
                 <div class="row">
+                
+                    <div id="menu" class="col-md-4 col-sm-4 col-xs-4">
+                        <div id="pcaText">
+                        <h2>Principal Components Analysis (PCA)</h2>
+                            <p>Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. 
+                                Lorem ipsum har varit standard ända sedan 1500-talet, när en okänd 
+                                boksättare tog att antal bokstäver och blandade dem för att göra ett 
+                                provexemplar av en bok. Lorem ipsum har inte bara överlevt fem århundraden, 
+                                utan även övergången till elektronisk typografi utan större förändringar. 
+                                Det blev allmänt känt på 1960-talet i samband med lanseringen av Letraset-ark
+                                med avsnitt av Lorem Ipsum, och senare med mjukvaror som Aldus PageMaker.</p>
+                        </div>
+                    </div>
+                    
                 <div id="mapDiv">
-                    <div id="sp2" style="height: 60vh; radius: 20px"></div>
+                    <div id="sp2" style="height: 60vh"></div>
                 </div>
-                   <br>
-                <p>Här kan det stå lite awesome facts om PCA</p>
-                <br><br>
+                   
                 </div>
             </div>
 
