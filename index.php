@@ -47,6 +47,12 @@
                 <div class="row">
                 
                     <div id="menu" class="col-md-4 col-sm-4 col-xs-4">
+                        <h2>World map and parallell coordinates</h2>
+                        <p>Start by choose something from the first dropdown 
+                            menu, the map will depend on that data. After that,
+                            feel free to pick data from as many dropdowns as you like.
+                            You can compare the data you choose in the parallell coordinate system.<br><br>
+
                         <B>The map will show this data</B> <BR>
                         <SELECT class id="dropdown1" NAME="Fruit">
                             <OPTION SELECTED> Select data for the map
@@ -96,6 +102,7 @@
                         </SELECT>
                         <BR>
                         <button class id="btn" onclick="drawPc()">Draw</button>
+                    
                     </div>
                    
 
