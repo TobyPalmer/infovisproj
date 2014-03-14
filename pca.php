@@ -51,11 +51,13 @@
                             <p>By using PCA it will be easier to find relations between the dimensions.</p>
                         </div>
                         </div>
+						
+						<div id="mapDiv" class="col-md-8 col-sm-8 col-xs-8">
+							<div id="sp2" style="height: 60vh"></div>
+						</div>
                     </div>
                     
-                <div id="mapDiv">
-                    <div id="sp2" style="height: 60vh"></div>
-                </div>
+
                    
                 </div>
             </div>
